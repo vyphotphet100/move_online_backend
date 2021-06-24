@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Built-By: Administrator
+Build-Jdk: 15.0.2
+Implementation-Title: move_up_backend
+Implementation-Version: 1.0
+Implementation-Vendor-Id: caovy
+Implementation-Vendor: Pivotal Software, Inc.
+Implementation-URL: http://projects.spring.io/spring-boot/move_up_backen
+ d/
+Created-By: Maven Integration for Eclipse
+
