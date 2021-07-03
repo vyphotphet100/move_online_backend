@@ -148,7 +148,7 @@ public class MissionService extends BaseService implements IMissionService{
 
 		MissionDTO missionDto = this.converter.toDTO(missionEntity, MissionDTO.class);
 		missionDto.setMessage("Thực hiện nhiệm vụ thành công.");
-		return missionDto;
+		return missionDto; 
 	}
 
 }
