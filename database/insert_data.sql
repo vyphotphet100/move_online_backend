@@ -11,9 +11,10 @@ INSERT INTO message(content) VALUES
 ("content1"),
 ("content2");
 
-INSERT INTO mission(name, description, short_description, type, num_of_coin_gift_box, num_of_star, num_of_time_gift_box) VALUES
-("Điểm danh", "Thực hiện điểm danh mỗi ngày để nhận được những phần thưởng tương ứng.", "Thực hiện điểm danh mỗi ngày.", "DIEMDANH", 0, 3, 0),
-("Capcha", "Mission 2 description", "Short description" , "CAPCHA", 0, 0, 4);
+INSERT INTO mission(name, description, short_description, type, num_of_coin_gift_box, num_of_star, num_of_time_gift_box, time) VALUES
+("Điểm danh", "Thực hiện điểm danh mỗi ngày để nhận được những phần thưởng tương ứng.", "Thực hiện điểm danh mỗi ngày.", "DIEMDANH", 0, 3, 0, null),
+("Capcha", "Mission 2 description", "Short description" , "CAPCHA", 0, 0, 4, null),
+("Xem trang", 'Thực hiện xem trang mỗi ngày để nhận được những phần quà tương ứng.<br><input type="hidden" id="ads-link" value="https://www.google.com.vn"/>', "Thực hiện xem trang để nhận được những phần quà tương ứng." , "VIEW-ADS", 4, 3, 2, 30);
 
 INSERT INTO momo(phone_number, name) VALUES
 ("0975543975", "Cao Đinh Sỹ Vỹ"),
