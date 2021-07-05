@@ -69,7 +69,9 @@ public class MomoService extends BaseService implements IMomoService {
 		}
 
 		// save momo number at momo table
-		momoEntity = momoRepo.save(this.converter.toEntity(momoDto, MomoEntity.class));
+		momoEntity = this.converter.toEntity(momoDto, MomoEntity.class);
+		momoEntity.setUser(null);
+		momoEntity = momoRepo.save(momoEntity);
 		momoDto = this.converter.toDTO(momoEntity, MomoDTO.class);
 		momoDto.setMessage("Đã lưu thông tin thanh toán.");
 

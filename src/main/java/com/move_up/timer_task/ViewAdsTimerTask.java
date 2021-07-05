@@ -50,7 +50,7 @@ public class ViewAdsTimerTask extends TimerTask {
 
         if (_count.equals(this.time)) {
             Message message = new Message();
-            message.setMessage("Done");
+            message.setMessage("Nhiệm vụ hoàn thành.");
             messageSocketDto.setType(MessageSocketDTO.MessageType.NOTIFICATION);
             try {
                 messageSocketDto.setContent(mapper.writeValueAsString(message));

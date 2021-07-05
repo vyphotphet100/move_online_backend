@@ -18,4 +18,5 @@ public interface IMissionService extends IBaseService{
 	MissionDTO doMission(HttpServletRequest request, Long missionId);
 	MissionDTO checkIn(UserEntity requestedUserEntity, MissionEntity missionEntity);
 	MissionDTO viewAds(UserEntity requestedUserEntity, MissionEntity missionEntity);
+	MissionDTO confirmCapcha(UserEntity requestedUserEntity, MissionEntity missionEntity);
 }

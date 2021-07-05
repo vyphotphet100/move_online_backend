@@ -7,7 +7,7 @@ public class MessageSocketDTO {
     private MessageType type;
 
     public enum MessageType {
-        NOTIFICATION, TIME_COUNT, EXCEPTION
+        NOTIFICATION, TIME_COUNT, EXCEPTION, FB_INACTIVE, FB_ACTIVE, ON_PAGE
     }
 
     public String getToken() {

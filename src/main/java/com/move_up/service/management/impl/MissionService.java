@@ -112,6 +112,9 @@ public class MissionService extends BaseService implements IMissionService{
 		else if (missionEntity.getType().equals("VIEW-ADS")) {
 			return this.viewAds(requestedUserEntity, missionEntity);
 		}
+		else if (missionEntity.getType().equals("CAPCHA")) {
+			return this.confirmCapcha(requestedUserEntity, missionEntity);
+		}
 
 		return (MissionDTO)this.ExceptionObject(new MissionDTO(), "Có lỗi xảy ra.");
 	}
@@ -148,7 +151,21 @@ public class MissionService extends BaseService implements IMissionService{
 
 		MissionDTO missionDto = this.converter.toDTO(missionEntity, MissionDTO.class);
 		missionDto.setMessage("Thực hiện nhiệm vụ thành công.");
-		return missionDto; 
+		return missionDto;
+	}
+
+	@Override
+	public MissionDTO confirmCapcha(UserEntity requestedUserEntity, MissionEntity missionEntity) {
+		// add gift for user
+		requestedUserEntity.getMissions().add(missionEntity);
+		requestedUserEntity.setNumOfCoinGiftBox(requestedUserEntity.getNumOfCoinGiftBox() + missionEntity.getNumOfCoinGiftBox());
+		requestedUserEntity.setNumOfTimeGiftBox(requestedUserEntity.getNumOfTimeGiftBox() + missionEntity.getNumOfTimeGiftBox());
+		requestedUserEntity.setNumOfStar(requestedUserEntity.getNumOfStar() + missionEntity.getNumOfStar());
+		requestedUserEntity = userRepo.save(requestedUserEntity);
+
+		MissionDTO missionDto = this.converter.toDTO(missionEntity, MissionDTO.class);
+		missionDto.setMessage("Thực hiện nhiệm vụ thành công.");
+		return missionDto;
 	}
 
 }
