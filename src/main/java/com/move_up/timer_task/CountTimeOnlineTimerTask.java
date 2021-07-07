@@ -1,5 +1,8 @@
 package com.move_up.timer_task;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.move_up.dto.MessageSocketDTO;
 import com.move_up.entity.UserEntity;
 import com.move_up.global.Global;
 import com.move_up.repository.UserRepository;
@@ -29,10 +32,10 @@ public class CountTimeOnlineTimerTask extends TimerTask {
     }
 
     @Override
-    public void run() {
-        if (Global.userAttributes.get(username).contains("fbStatus:online;")) {
+    public void run(){
+        if (MyUtil.getUserAttribute(username, "fbStatus").equals("online")) {
             _count++;
-        } else if (Global.userAttributes.get(username).contains("fbStatus:checking;")) {
+        } else if (MyUtil.getUserAttribute(username, "fbStatus").equals("checking")) {
             _count = 0;
         } else {
             _count = 0;
@@ -63,7 +66,42 @@ public class CountTimeOnlineTimerTask extends TimerTask {
             userRepo.save(userEntity);
             MyUtil.setUserAttribute(username, "fbStatus", "checking");
             MyUtil.setUserAttribute(username, "onPage", "false");
-            messageTmp.convertAndSend(this.channel, "Increase 1 minute.");
+
+            ObjectMapper mapper = new ObjectMapper();
+            MessageSocketDTO messageSocketDTO = new MessageSocketDTO();
+            messageSocketDTO.setType(MessageSocketDTO.MessageType.INCREASE_MINUTE);
+            messageSocketDTO.setReceiver(username);
+            Content content = new Content();
+            content.setNumOfMinute(1);
+            content.setMessage("Increase 1 minute.");
+            try {
+                messageSocketDTO.setContent(mapper.writeValueAsString(content));
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+
+            messageTmp.convertAndSend(this.channel, messageSocketDTO);
+        }
+    }
+
+    private static class Content {
+        private Integer numOfMinute;
+        private String message;
+
+        public Integer getNumOfMinute() {
+            return numOfMinute;
+        }
+
+        public void setNumOfMinute(Integer numOfMinute) {
+            this.numOfMinute = numOfMinute;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
         }
     }
 }

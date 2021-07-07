@@ -10,7 +10,6 @@ public class WebSocketEventListener {
 
     @EventListener
     public void handleWebSocketConnectListener(SessionConnectedEvent event) {
-        System.out.println("New device");
     }
 
     @EventListener

@@ -3,8 +3,13 @@ package com.move_up.service.management.impl;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
 
 import com.move_up.dto.UserDTO;
@@ -108,6 +113,21 @@ public class UserService extends BaseService implements IUserService {
 		}
 
 		return (UserDTO) this.ExceptionObject(userDto, "This username does not exist.");
+	}
+
+	@Override
+	public UserDTO logout(HttpServletRequest request, HttpServletResponse response) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UserDTO userDto = new UserDTO();
+		try {
+			if (auth != null) {
+				new SecurityContextLogoutHandler().logout(request, response, auth);
+			}
+			userDto.setMessage("Logout successfully.");
+			return userDto;
+		} catch (Exception ex) {
+			return (UserDTO)this.ExceptionObject(userDto, "Something went wrong.");
+		}
 	}
 
 	@Override

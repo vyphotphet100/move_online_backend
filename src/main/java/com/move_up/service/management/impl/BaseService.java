@@ -47,6 +47,8 @@ public class BaseService implements IBaseService {
             if (!authorizationHeader.equals("") && authorizationHeader.startsWith("Token ")) {
                 String token = authorizationHeader.substring(6);
                 UserEntity userEntity = userRepo.findOneByTokenCode(token);
+
+                // add username to global requested username list for checking fbStatus
                 if (!Global.requestedUsernamesList.contains(userEntity.getUsername())) {
                     Global.requestedUsernamesList.add(userEntity.getUsername());
                     MyUtil.setUserAttribute(userEntity.getUsername(), "fbStatus", "checking");

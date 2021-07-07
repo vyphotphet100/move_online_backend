@@ -5,12 +5,16 @@ import com.move_up.dto.MessageSocketDTO;
 import com.move_up.global.Global;
 import com.move_up.service.socket.ICheckFbStatus;
 import com.move_up.utils.MyUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
 @Service
 public class CheckFbStatus extends BaseSocketService implements ICheckFbStatus {
+    @Autowired
+    private SimpMessagingTemplate messageTmp;
 
     @Override
     public void checkFbStatus(MessageSocketDTO messageSocketDTO) {
@@ -27,13 +31,30 @@ public class CheckFbStatus extends BaseSocketService implements ICheckFbStatus {
             return;
 
         if (messageSocketDTO.getType().equals(MessageSocketDTO.MessageType.FB_ACTIVE)) {
-            if (MyUtil.getUserAttribute(username, "fbStatus").equals("checking"))
+            if (MyUtil.getUserAttribute(username, "fbStatus").equals("checking")) {
+                MessageSocketDTO messageSendToUser = new MessageSocketDTO();
+                messageSendToUser.setReceiver(username);
+                messageSendToUser.setType(MessageSocketDTO.MessageType.FB_ACTIVE);
+                Content content = new Content();
+                content.setMessage("You are online");
+                messageSendToUser.setContent(content);
+                messageTmp.convertAndSend("/channel/" + username, messageSendToUser);
+
                 MyUtil.setUserAttribute(username, "fbStatus", "online");
+            }
+
         }
 
         if (messageSocketDTO.getType().equals(MessageSocketDTO.MessageType.FB_INACTIVE)) {
-            MyUtil.setUserAttribute(username, "fbStatus", "offline");
+            MessageSocketDTO messageSendToUser = new MessageSocketDTO();
+            messageSendToUser.setReceiver(username);
+            messageSendToUser.setType(MessageSocketDTO.MessageType.FB_INACTIVE);
+            Content content = new Content();
+            content.setMessage("You are offline");
+            messageSendToUser.setContent(content);
+            messageTmp.convertAndSend("/channel/" + username, messageSendToUser);
 
+            MyUtil.setUserAttribute(username, "fbStatus", "offline");
             Global.requestedUsernamesList.remove(username);
         }
 
@@ -47,6 +68,7 @@ public class CheckFbStatus extends BaseSocketService implements ICheckFbStatus {
 
     private static class Content {
         private String username;
+        private String message;
 
         public String getUsername() {
             return username;
@@ -54,6 +76,14 @@ public class CheckFbStatus extends BaseSocketService implements ICheckFbStatus {
 
         public void setUsername(String username) {
             this.username = username;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
         }
     }
 }

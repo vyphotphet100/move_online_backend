@@ -6,6 +6,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.move_up.dto.UserDTO;
 import com.move_up.service.management.IUserService;
+import org.springframework.web.servlet.view.RedirectView;
 
 @RestController
 public class UserAPI {
@@ -76,6 +80,12 @@ public class UserAPI {
 	@GetMapping("/api/user/referred_user") 
 	public ResponseEntity<UserDTO> getReferredUser(HttpServletRequest request) {
 		UserDTO userDto = userService.getReferredUser(request);
+		return new ResponseEntity<UserDTO>(userDto, userDto.getHttpStatus());
+	}
+
+	@GetMapping("/api/user/logout")
+	public ResponseEntity<UserDTO> logout(HttpServletRequest request, HttpServletResponse response) {
+		UserDTO userDto = userService.logout(request, response);
 		return new ResponseEntity<UserDTO>(userDto, userDto.getHttpStatus());
 	}
 }
