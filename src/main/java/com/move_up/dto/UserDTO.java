@@ -15,8 +15,10 @@ public class UserDTO extends BaseDTO implements UserDetails{
 	private String fullname;
 	private String email;
 	private String facebookLink;
+	private String facebookName;
 	private String phoneNumber;
 	private String address;
+	private String picture;
 	private Integer accountBalance;
 	private Integer numOfStar;
 	private Integer numOfCoinGiftBox;
@@ -174,6 +176,23 @@ public class UserDTO extends BaseDTO implements UserDetails{
 	public void setNumOfTravelledTime(Integer numOfTravelledTime) {
 		this.numOfTravelledTime = numOfTravelledTime;
 	}
+
+	public String getPicture() {
+		return picture;
+	}
+
+	public void setPicture(String picture) {
+		this.picture = picture;
+	}
+
+	public String getFacebookName() {
+		return facebookName;
+	}
+
+	public void setFacebookName(String facebookName) {
+		this.facebookName = facebookName;
+	}
+
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}

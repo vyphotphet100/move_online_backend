@@ -34,6 +34,7 @@ public class UserAPI {
 		return new ResponseEntity<UserDTO>(userDto, userDto.getHttpStatus());
 	}
 
+	@PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
 	@GetMapping("/api/user/{username}")
 	public ResponseEntity<UserDTO> getOneUser(@PathVariable("username") String username, HttpServletRequest request) {
 		UserDTO userDto = userService.findOne(username, request, "requestedRole=user");
@@ -46,12 +47,14 @@ public class UserAPI {
 		return new ResponseEntity<UserDTO>(userDto, userDto.getHttpStatus());
 	}
 
+	@PreAuthorize("hasAnyAuthority('USER')")
 	@PutMapping("/api/user")
-	public ResponseEntity<UserDTO> putUser(@RequestBody UserDTO userDto) {
-		userDto = userService.update(userDto);
+	public ResponseEntity<UserDTO> putUser(@RequestBody UserDTO userDto, HttpServletRequest request) {
+		userDto = userService.update(userDto, request);
 		return new ResponseEntity<UserDTO>(userDto, userDto.getHttpStatus());
 	}
 
+	@PreAuthorize("hasAnyAuthority('ADMIN')")
 	@DeleteMapping("/api/user/{username}")
 	public ResponseEntity<UserDTO> deleteUser(@PathVariable("username") String username, HttpServletResponse response) {
 		UserDTO userDto = userService.delete(username);
@@ -64,28 +67,60 @@ public class UserAPI {
 		UserDTO userDto = userService.getCurrentUser(request);
 		return new ResponseEntity<UserDTO>(userDto, userDto.getHttpStatus());
 	}
-	
+
+	@PreAuthorize("hasAnyAuthority('USER')")
 	@GetMapping("/api/user/exchange_time_gift_box") 
 	public ResponseEntity<UserDTO> exchangeTimeGiftBox(HttpServletRequest request) {
 		UserDTO userDto = userService.exchangeTimeGiftBoxByStar(request);
 		return new ResponseEntity<UserDTO>(userDto, userDto.getHttpStatus());
 	}
-	
+
+	@PreAuthorize("hasAnyAuthority('USER')")
 	@GetMapping("/api/user/exchange_coin_gift_box") 
 	public ResponseEntity<UserDTO> exchangeCoinGiftBox(HttpServletRequest request) {
 		UserDTO userDto = userService.exchangeCoinGiftBoxByStar(request);
 		return new ResponseEntity<UserDTO>(userDto, userDto.getHttpStatus());
 	}
-	
+
+	@PreAuthorize("hasAnyAuthority('USER')")
 	@GetMapping("/api/user/referred_user") 
 	public ResponseEntity<UserDTO> getReferredUser(HttpServletRequest request) {
 		UserDTO userDto = userService.getReferredUser(request);
 		return new ResponseEntity<UserDTO>(userDto, userDto.getHttpStatus());
 	}
 
+	@PreAuthorize("hasAnyAuthority('USER')")
 	@GetMapping("/api/user/logout")
 	public ResponseEntity<UserDTO> logout(HttpServletRequest request, HttpServletResponse response) {
 		UserDTO userDto = userService.logout(request, response);
 		return new ResponseEntity<UserDTO>(userDto, userDto.getHttpStatus());
+	}
+
+	@PreAuthorize("hasAnyAuthority('USER')")
+	@PostMapping("/api/user/change_password")
+	public ResponseEntity<UserDTO> changePassword(@RequestBody UserDTO userDto, HttpServletRequest request) {
+		userDto = userService.changePassword(userDto, request);
+		return new ResponseEntity<UserDTO>(userDto, userDto.getHttpStatus());
+	}
+
+	@PreAuthorize("hasAnyAuthority('USER')")
+	@PostMapping("/api/user/check_facebook")
+	public ResponseEntity<UserDTO> checkFacebookAccByPostLink(@RequestBody UserDTO userDto, HttpServletRequest request) {
+		userDto = userService.checkFacebookAccByPostLink(userDto, request);
+		return new ResponseEntity(userDto, userDto.getHttpStatus());
+	}
+
+	@PreAuthorize("hasAnyAuthority('USER')")
+	@PostMapping("/api/user/save_facebook")
+	public ResponseEntity<UserDTO> saveFacebookAccByPostLink(@RequestBody UserDTO userDto, HttpServletRequest request) {
+		userDto = userService.saveFacebookAccByPostLink(userDto, request);
+		return new ResponseEntity(userDto, userDto.getHttpStatus());
+	}
+
+	@PreAuthorize("hasAnyAuthority('USER')")
+	@PostMapping("/api/user/save_referrer_user")
+	public ResponseEntity<UserDTO> saveReferrerUser(@RequestBody UserDTO userDto, HttpServletRequest request) {
+		userDto = userService.saveReferrerUser(request, userDto);
+		return new ResponseEntity(userDto, userDto.getHttpStatus());
 	}
 }

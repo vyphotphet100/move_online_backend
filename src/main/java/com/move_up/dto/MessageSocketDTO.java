@@ -13,7 +13,8 @@ public class MessageSocketDTO {
         FB_INACTIVE,
         FB_ACTIVE,
         ON_PAGE,
-        INCREASE_MINUTE
+        INCREASE_MINUTE,
+        INCREASE_COIN_GIFT_BOX
     }
 
     public String getToken() {

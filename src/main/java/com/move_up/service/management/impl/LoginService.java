@@ -29,12 +29,12 @@ public class LoginService extends BaseService implements ILoginService {
 			userDto.setTokenCode(newToken);
 			userEntity = userRepo.save(this.converter.toEntity(userDto, UserEntity.class));
 			userDto = this.converter.toDTO(userEntity, UserDTO.class);
-			userDto.setMessage("Login successfully.");
+			userDto.setMessage("Đăng nhập thành công.");
 
 			return userDto;
 		}
 
-		return (UserDTO) this.ExceptionObject(new UserDTO(), "Invalid username or password.");
+		return (UserDTO) this.ExceptionObject(new UserDTO(), "Sai tên đăng nhập hoặc mật khẩu.");
 	}
 
 	@Override

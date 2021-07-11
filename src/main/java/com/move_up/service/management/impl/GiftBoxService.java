@@ -36,9 +36,9 @@ public class GiftBoxService extends BaseService implements IGiftBoxService {
 				// decrease num of coin gift box
 				userEntity.setNumOfCoinGiftBox(userEntity.getNumOfCoinGiftBox() - 1);
 
-				// Get random number between 5-20
-				int max = 20;
-				int min = 5;
+				// Get random number between 3-10
+				int max = 10;
+				int min = 3;
 				int value = (int) Math.floor(Math.random() * (max - min + 1) + min);
 
 				// increase balance and set value to coinGiftBoxDto
@@ -79,8 +79,8 @@ public class GiftBoxService extends BaseService implements IGiftBoxService {
 				userEntity.setNumOfTimeGiftBox(userEntity.getNumOfTimeGiftBox() - 1);
 
 				// Get random number between 5-20
-				int max = 20;
-				int min = 5;
+				int max = 5;
+				int min = 1;
 				int value = (int) Math.floor(Math.random() * (max - min + 1) + min);
 
 				// increase balance and set value to coinGiftBoxDto

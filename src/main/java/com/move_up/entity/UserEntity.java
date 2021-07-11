@@ -34,12 +34,18 @@ public class UserEntity extends BaseEntity{
 	
 	@Column(name = "facebook_link")
 	private String facebookLink;
+
+	@Column(name = "facebook_name")
+	private String facebookName;
 	
 	@Column(name = "phone_number")
 	private String phoneNumber;
 	
 	@Column(name = "address")
 	private String address;
+
+	@Column(name = "picture", columnDefinition="TEXT")
+	private String picture;
 	
 	@Column(name = "account_balance")
 	private Integer accountBalance;
@@ -282,5 +288,20 @@ public class UserEntity extends BaseEntity{
 	public void setCommission(Integer commission) {
 		this.commission = commission;
 	}
-	
+
+	public String getPicture() {
+		return picture;
+	}
+
+	public void setPicture(String picture) {
+		this.picture = picture;
+	}
+
+	public String getFacebookName() {
+		return facebookName;
+	}
+
+	public void setFacebookName(String facebookName) {
+		this.facebookName = facebookName;
+	}
 }

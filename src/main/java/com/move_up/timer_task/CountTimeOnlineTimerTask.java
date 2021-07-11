@@ -14,6 +14,8 @@ import java.util.TimerTask;
 public class CountTimeOnlineTimerTask extends TimerTask {
     private int _count = 0;
     private int _countOnPage = 0;
+    private int _countIncreCoinGiftBox = 0;
+    private int _defaultTimeIncreCoinGiftBox = 1;
 
     private String username = "";
     private String channel = "";
@@ -57,13 +59,12 @@ public class CountTimeOnlineTimerTask extends TimerTask {
             return;
         }
 
-
-        if (_count == 60) {
+        UserEntity userEntity = userRepo.findOne(username);
+        if (_count == 60 && userEntity.getNumOfDefaultTime() > 0) {
             _count = 0;
-            UserEntity userEntity = userRepo.findOne(username);
+            _countIncreCoinGiftBox++;
             userEntity.setNumOfDefaultTime(userEntity.getNumOfDefaultTime() - 1);
             userEntity.setNumOfTravelledTime(userEntity.getNumOfTravelledTime() + 1);
-            userRepo.save(userEntity);
             MyUtil.setUserAttribute(username, "fbStatus", "checking");
             MyUtil.setUserAttribute(username, "onPage", "false");
 
@@ -79,9 +80,35 @@ public class CountTimeOnlineTimerTask extends TimerTask {
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
-
             messageTmp.convertAndSend(this.channel, messageSocketDTO);
+
+            // check increase coin gift box
+            if (_countIncreCoinGiftBox == _defaultTimeIncreCoinGiftBox) {
+                _countIncreCoinGiftBox = 0;
+                messageSocketDTO.setType(MessageSocketDTO.MessageType.INCREASE_COIN_GIFT_BOX);
+                messageSocketDTO.setReceiver(username);
+                content = new Content();
+                content.setNumOfMinute(null);
+                content.setMessage("Increase 1 coin gift box.");
+                try {
+                    messageSocketDTO.setContent(mapper.writeValueAsString(content));
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+                userEntity.setNumOfCoinGiftBox(userEntity.getNumOfCoinGiftBox() + 1);
+                messageTmp.convertAndSend(this.channel, messageSocketDTO);
+
+                // get random number of default increasing coin gift box value
+                int max = 1;
+                int min = 5;
+                _defaultTimeIncreCoinGiftBox = (int) Math.floor(Math.random() * (max - min + 1) + min);
+            }
+
+            userRepo.save(userEntity);
         }
+
+        if (userEntity.getNumOfDefaultTime() == 0)
+            _count = 0;
     }
 
     private static class Content {

@@ -11,9 +11,14 @@ public interface IUserService extends IBaseService{
 	UserDTO findOne(String username, HttpServletRequest request, String userStr);
 	UserDTO getCurrentUser(HttpServletRequest request);
 	UserDTO save(UserDTO userDto);
-	UserDTO update(UserDTO userDto);
+	UserDTO update(UserDTO userDto, HttpServletRequest request);
 	UserDTO delete(String username);
 	UserDTO logout(HttpServletRequest request, HttpServletResponse response);
+
+	// action
+	UserDTO changePassword(UserDTO userDto, HttpServletRequest request);
+	UserDTO checkFacebookAccByPostLink(UserDTO userDto, HttpServletRequest request);
+	UserDTO saveFacebookAccByPostLink(UserDTO userDto, HttpServletRequest request);
 	
 	// mission
 	UserDTO exchangeTimeGiftBoxByStar(HttpServletRequest request);
@@ -22,4 +27,5 @@ public interface IUserService extends IBaseService{
 	
 	// reference
 	UserDTO getReferredUser(HttpServletRequest request);
+	UserDTO saveReferrerUser(HttpServletRequest request, UserDTO userDto);
 }
