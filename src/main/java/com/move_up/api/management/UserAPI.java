@@ -9,13 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.move_up.dto.UserDTO;
 import com.move_up.service.management.IUserService;
@@ -122,5 +116,11 @@ public class UserAPI {
 	public ResponseEntity<UserDTO> saveReferrerUser(@RequestBody UserDTO userDto, HttpServletRequest request) {
 		userDto = userService.saveReferrerUser(request, userDto);
 		return new ResponseEntity(userDto, userDto.getHttpStatus());
+	}
+
+	@RequestMapping(value = "/api/user/check_referrer_exist", method = RequestMethod.OPTIONS)
+	public ResponseEntity<UserDTO> checkReferrerExist(@RequestBody UserDTO userDto) {
+		userDto = userService.checkReferrerExist(userDto);
+		return new ResponseEntity<UserDTO>(userDto, userDto.getHttpStatus());
 	}
 }

@@ -80,4 +80,9 @@ public class MyUtil {
 
         return null;
     }
+
+    public static Boolean isEmailValid(String email) {
+        String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
+        return email.matches(regex);
+    }
 }

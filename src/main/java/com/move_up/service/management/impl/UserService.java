@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.move_up.utils.MyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -78,25 +80,48 @@ public class UserService extends BaseService implements IUserService {
 
     @Override
     public UserDTO save(UserDTO userDto) {
-        UserEntity userEntity = userRepo.findOne(userDto.getUsername());
-        if (userEntity == null) {
-            userEntity = this.converter.toEntity(userDto, UserEntity.class);
-            userEntity.setTokenCode(JwtUtil.generateToken(userEntity));
-            userEntity.setAccountBalance(0);
-            userEntity.setCommission(0);
-            userEntity.setNumOfCoinGiftBox(0);
-            userEntity.setNumOfDefaultTime(0);
-            userEntity.setNumOfStar(0);
-            userEntity.setNumOfTimeGiftBox(0);
-            userEntity.setNumOfTravelledTime(0);
-            userEntity = userRepo.save(userEntity);
+        if (userRepo.findOne(userDto.getUsername()) != null)
+            return (UserDTO) this.ExceptionObject(new UserDTO(), "Tên đăng nhập này đã tồn tại.");
 
-            userDto = this.converter.toDTO(userEntity, UserDTO.class);
-            userDto.setMessage("Đăng ký thành công.");
-            return userDto;
+        if (userDto.getUsername() == null || userDto.getUsername().trim() == "")
+            return (UserDTO) this.ExceptionObject(new UserDTO(), "Tên đăng nhập không được bỏ trống.");
+
+        if (userDto.getPassword() == null || userDto.getPassword().trim() == "")
+            return (UserDTO) this.ExceptionObject(new UserDTO(), "Mật khẩu không được bỏ trống.");
+
+        if (userDto.getFullname() == null || userDto.getFullname().trim() == "")
+            return (UserDTO) this.ExceptionObject(new UserDTO(), "Mật khẩu không được bỏ trống.");
+
+        if (userDto.getUsername().trim().length() < 4)
+            return (UserDTO) this.ExceptionObject(new UserDTO(), "Tên đăng nhập phải có ít nhất 4 ký tự.");
+
+        if (userDto.getPassword().trim().length() < 6)
+            return (UserDTO) this.ExceptionObject(new UserDTO(), "Mật khẩu phải có ít nhất 6 ký tự.");
+
+        if (userDto.getReferrerUsername() != null && userDto.getReferrerUsername().trim() != "") {
+            if (userRepo.findOne(userDto.getReferrerUsername()) == null)
+                return (UserDTO) this.ExceptionObject(new UserDTO(), "Không tồn tại mã người giới thiệu này.");
         }
 
-        return (UserDTO) this.ExceptionObject(userDto, "Tên đăng nhập này đã tồn tại.");
+        userDto.getRoleCodes().add("USER");
+        UserEntity userEntity = this.converter.toEntity(userDto, UserEntity.class);
+        userEntity.setTokenCode(JwtUtil.generateToken(userDto));
+        if (userEntity.getReferrerUser() != null)
+            userEntity.setAccountBalance(1000);
+        else
+            userEntity.setAccountBalance(0);
+        userEntity.setCommission(0);
+        userEntity.setNumOfCoinGiftBox(0);
+        userEntity.setNumOfDefaultTime(0);
+        userEntity.setNumOfStar(0);
+        userEntity.setNumOfTimeGiftBox(0);
+        userEntity.setNumOfTravelledTime(0);
+        userEntity = userRepo.save(userEntity);
+
+        userDto = this.converter.toDTO(userEntity, UserDTO.class);
+        userDto.setPassword(null);
+        userDto.setMessage("Đăng ký thành công.");
+        return userDto;
     }
 
     @Override
@@ -104,6 +129,35 @@ public class UserService extends BaseService implements IUserService {
         UserEntity requestedUserEntity = this.getRequestedUser(request);
         if (requestedUserEntity == null)
             return (UserDTO) this.ExceptionObject(new UserDTO(), "Không tồn tại người dùng này.");
+
+        // check if phone number is in true format
+        if (userDto.getPhoneNumber() != null && userDto.getPhoneNumber().trim() != "") {
+            if (userDto.getPhoneNumber().length() != 10)
+                return (UserDTO) this.ExceptionObject(new UserDTO(), "Số điện thoại không hợp lệ.");
+            for (char ch : userDto.getPhoneNumber().toCharArray())
+                if (!Character.isDigit(ch))
+                    return (UserDTO) this.ExceptionObject(new UserDTO(), "Số điện thoại không hợp lệ.");
+        }
+
+        // check if email is in true format
+        if (userDto.getEmail() != null && userDto.getEmail().trim() != "")
+            if (!MyUtil.isEmailValid(userDto.getEmail()))
+                return (UserDTO) this.ExceptionObject(new UserDTO(), "Email không hợp lê.");
+
+        // check email and phone number exist
+        if (userDto.getEmail() != null && userDto.getPhoneNumber() != null &&
+                userDto.getEmail().trim() != "" && userDto.getPhoneNumber().trim() != "") {
+            List<UserEntity> userEntities = userRepo.findAll();
+            for (UserEntity userEntity : userEntities) {
+                if (!userEntity.getUsername().equals(requestedUserEntity.getUsername()) &&
+                        userDto.getEmail().equals(userEntity.getEmail()))
+                    return (UserDTO) this.ExceptionObject(new UserDTO(), "Email này đã tồn tại trên hệ thống.");
+
+                if (!userEntity.getUsername().equals(requestedUserEntity.getUsername()) &&
+                        userDto.getPhoneNumber().equals(userEntity.getPhoneNumber()))
+                    return (UserDTO) this.ExceptionObject(new UserDTO(), "Số điện thoại này đã tồn tại trên hệ thống.");
+            }
+        }
 
         requestedUserEntity.setFullname(userDto.getFullname());
         requestedUserEntity.setEmail(userDto.getEmail());
@@ -397,7 +451,7 @@ public class UserService extends BaseService implements IUserService {
         String referrerCode = (String) userDto.getListRequest().get(0);
 
         if (referrerCode.trim().equals(""))
-            return (UserDTO)this.ExceptionObject(new UserDTO(), "Có lỗi xảy ra.");
+            return (UserDTO) this.ExceptionObject(new UserDTO(), "Có lỗi xảy ra.");
 
         if (requestedUserEntity.getUsername().equals(referrerCode))
             return (UserDTO) this.ExceptionObject(new UserDTO(), "Bạn không thể tự thêm mã người giới thiệu của chính mình.");
@@ -411,6 +465,16 @@ public class UserService extends BaseService implements IUserService {
         userRepo.save(requestedUserEntity);
         UserDTO resDto = new UserDTO();
         resDto.setMessage("Thêm mã người giới thiệu thành công. Bạn đã nhận được 1000 xu.");
+        return resDto;
+    }
+
+    @Override
+    public UserDTO checkReferrerExist(UserDTO userDto) {
+        if (userRepo.findOne(userDto.getUsername()) == null)
+            return (UserDTO) this.ExceptionObject(new UserDTO(), "Người giới thiệu không tồn tại.");
+
+        UserDTO resDto = new UserDTO();
+        resDto.setMessage("Người giới thiệu tồn tại.");
         return resDto;
     }
 

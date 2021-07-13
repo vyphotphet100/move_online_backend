@@ -28,4 +28,5 @@ public interface IUserService extends IBaseService{
 	// reference
 	UserDTO getReferredUser(HttpServletRequest request);
 	UserDTO saveReferrerUser(HttpServletRequest request, UserDTO userDto);
+	UserDTO checkReferrerExist(UserDTO userDto);
 }
