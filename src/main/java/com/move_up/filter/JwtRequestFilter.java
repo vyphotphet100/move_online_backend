@@ -40,11 +40,15 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 				String token = authorizationHeader.substring(6);
 				UserEntity userEntity = userRepo.findOneByTokenCode(token);
 
+				UserDTO userDto = new UserDTO();
 				if (userEntity != null) {
-					UserDTO userDto = converter.toDTO(userEntity, UserDTO.class);
+					userDto = converter.toDTO(userEntity, UserDTO.class);
 					authentication = new UsernamePasswordAuthenticationToken(userDto, null,
 							userDto.getAuthorities());
 				}
+//				else
+//					authentication = new UsernamePasswordAuthenticationToken(userDto, null,
+//							userDto.getAuthorities());
 			}
 		}
 
@@ -52,6 +56,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 			authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 		}
+		else
+			SecurityContextHolder.getContext().setAuthentication(null);
 
 		filterChain.doFilter(request, response);
 

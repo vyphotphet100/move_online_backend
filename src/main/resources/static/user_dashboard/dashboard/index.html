@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Move Online</title>
+
+    <div id="loading-div" style="position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; z-index: 9999; background: center no-repeat #fff;">
+        <img src="../../common/loading2.gif" style="position: fixed; top: 50%; left: 50%;transform: translate(-50%, -50%);">
+    </div>
+    <script src="../../common/js/loading.js"></script>
+
+    <!-- Custom fonts for this template-->
+    <link href="../../common/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="../../common/css/sb-admin-2.min.css" rel="stylesheet">
+
+
+
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion toggled" id="accordionSidebar">
+
+        </ul>
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" id="topbar">
+                </nav>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+                        <a onclick="copyReferralCode();" class="btn btn-primary">
+                            <img src="../../common/loading.gif" style="width:20px;height:20px;">
+                        </a>
+                    </div>
+
+                    <!-- Content Row -->
+                    <div class="row">
+
+                        <!-- Trạng thái Card Example -->
+                        <div id="statusBox" class="col-xl-12 col-md-6 mb-4">
+                            <div class="card border-left-info shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Trạng thái
+                                            </div>
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col-auto">
+                                                    <div id='status' class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
+                                                        <img src="../../common/loading.gif" style="width:20px;height:20px;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <span id="statusIcon" style="color: rgb(209, 209, 209);">
+                                                <i class="fas fa-info fa-2x text-300"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Số xu Card Example -->
+                        <div id="numOfCoinBox" class="col-xl-5 col-md-6 mb-4">
+                            <div class="card border-left-warning shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                Số xu</div>
+                                            <div id='numOfCoin' class="h5 mb-0 font-weight-bold text-gray-800">
+                                                <img src="../../common/loading.gif" style="width:20px;height:20px;">
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <span id="numOfCoinIcon" style="color: rgb(209, 209, 209);">
+                                                <i class="fas fa-donate fa-2x text-300"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Thời gian còn lại Card Example -->
+                        <div id="numOfTimeBox" class="col-xl-4 col-md-6 mb-4">
+                            <div class="card border-left-success shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                Thời gian còn lại</div>
+                                            <div id="numOfTime" class="h5 mb-0 font-weight-bold text-gray-800">
+                                                <img src="../../common/loading.gif" style="width:20px;height:20px;">
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <span id="numOfTimeIcon" style="color: rgb(209, 209, 209);">
+                                                <i class="fas fa-stopwatch fa-2x text-300"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Thời gian đã online Card Example -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-info shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Thời gian đã online hôm nay
+                                            </div>
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col-auto">
+                                                    <div id='numOfTravelledTime' class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
+                                                        <img src="../../common/loading.gif" style="width:20px;height:20px;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <span id="numOfTraversedTimeIcon" style="color: rgb(209, 209, 209);">
+                                                <i class="fas fa-hourglass-end fa-2x text-300"></i>
+                                                <!-- <img src="image/Hourglass_902x.gif" style="width: 50px; height: 50px;"/> -->
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Hộp quà xu Card Example -->
+                        <div id="coinGiftBoxBox" onclick="openCoinGiftBox();" class="col-xl-5 col-md-6 mb-4">
+                            <div class="card border-left-warning shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Hộp quà xu
+                                            </div>
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col-auto">
+                                                    <div id='numOfCoinGiftBox' class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
+                                                        <img src="../../common/loading.gif" style="width:20px;height:20px;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <span id="coinGiftBoxIcon" style="color: rgb(209, 209, 209);">
+                                                <i class="fas fa-gift fa-2x text-300"></i>
+                                                <!-- <img src="image/wait-coin-gift-box.gif" style="width: 40px; height: 40px;"/> -->
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Hộp quà thời gian Card Example -->
+                        <div id="timeGiftBoxBox" onclick="openTimeGiftBox();" class="col-xl-5 col-md-6 mb-4">
+                            <div class="card border-left-success shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                Hộp quà thời gian</div>
+                                            <div id='numOfTimeGiftBox' class="h5 mb-0 font-weight-bold text-gray-800">
+                                                <img src="../../common/loading.gif" style="width:20px;height:20px;">
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <span id="timeGiftBoxIcon" style="color: rgb(209, 209, 209);">
+                                                <i class="fas fa-business-time fa-2x text-300"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sao Card Example -->
+                        <div href="#" class="col-xl-2 col-md-6 mb-4">
+                            <div class="card border-left-warning shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                Sao</div>
+                                            <div id='numOfStar' class="h5 mb-0 font-weight-bold text-gray-800">
+                                                <img src="../../common/loading.gif" style="width:20px;height:20px;">
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <span id="numOfStarIcon" style="color: rgb(251, 255, 23);">
+                                                <i class="fas fa-star fa-2x text-300"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Content Row -->
+                    <div class="row">
+
+                        <!-- Thông báo -->
+                        <div class="col-xl-8">
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary"><a href="../announcement/index.html">Thông báo</a></h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="announcement content" style="display:none;">
+                                        <div class="announcement1">
+                                            <h5>
+                                                <strong class="announcement1 title">Thông báo 3</strong>
+                                            </h5>
+                                            <p class="announcement1 short_description">Add some quality, svg illustrations to your project courtesy of <a target="_blank" rel="nofollow" href="https://undraw.co/">unDraw</a>, a constantly updated collection of beautiful svg images that you can use
+                                                completely free and without attribution!
+                                            </p>
+                                            <div style="text-align:right;">
+                                                <a class="announcement1 href" href="#">Xem tin &rarr;</a>
+                                            </div>
+                                            <hr class="sidebar-divider my-0">
+                                            <br>
+                                        </div>
+                                        <div class="announcement2">
+                                            <h5>
+                                                <strong class="announcement2 title">Thông báo 2</strong>
+                                            </h5>
+                                            <p class="announcement2 short_description">Add some quality, svg illustrations to your project courtesy of <a target="_blank" rel="nofollow" href="https://undraw.co/">unDraw</a>, a constantly updated collection of beautiful svg images that you can use
+                                                completely free and without attribution!
+                                            </p>
+                                            <div style="text-align:right;">
+                                                <a class="announcement2 href" href="#">Xem tin &rarr;</a>
+                                            </div>
+                                            <hr class="sidebar-divider my-0">
+                                            <br>
+                                        </div>
+                                        <div class="announcement3">
+                                            <h5>
+                                                <strong class="announcement3 title">Thông báo 1</strong>
+                                            </h5>
+                                            <p class="announcement3 short_description">Add some quality, svg illustrations to your project courtesy of <a target="_blank" rel="nofollow" href="https://undraw.co/">unDraw</a>, a constantly updated collection of beautiful svg images that you can use
+                                                completely free and without attribution!
+                                            </p>
+                                            <div style="text-align:right;">
+                                                <a class="announcement3 href" href="#">Xem tin &rarr;</a>
+                                            </div>
+                                            <hr class="sidebar-divider my-0">
+                                            <br>
+                                        </div>
+                                    </div>
+
+                                    <div class="announcement loading" style="display:block;">
+                                        <div style="text-align:center;">
+                                            <img src="../../common/loading.gif" style="width:100px;height:100px;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Rút tiền gần nhất -->
+                        <div class="col-xl-4">
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Rút tiền gần nhất</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="withdraw_request_content" style="display:none;">
+                                        <p class="withdraw_request">.</p>
+                                        <hr class="sidebar-divider my-0">
+                                        <p class="withdraw_request">.</p>
+                                        <hr class="sidebar-divider my-0">
+                                        <p class="withdraw_request">.</p>
+                                        <hr class="sidebar-divider my-0">
+                                        <p class="withdraw_request">.</p>
+                                        <hr class="sidebar-divider my-0">
+                                        <p class="withdraw_request">.</p>
+                                        <hr class="sidebar-divider my-0">
+                                        <p class="withdraw_request">.</p>
+                                        <hr class="sidebar-divider my-0">
+                                        <p class="withdraw_request">.</p>
+                                    </div>
+                                    <div class="withdraw_request_loading" style="display:block;">
+                                        <div style="text-align:center;">
+                                            <img src="../../common/loading.gif" style="width:50px;height:50px;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Nhiệm vụ-->
+                        <div class="col-xl-9">
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">
+                                        <a href="../mission/index.html">Nhiệm vụ</a>
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div>
+                                        <p>Thực hiện các nhiệm vụ: Điểm danh, xem video, like page, subscribe, ... để nhận <strong>sao</strong> và <strong>hộp quà xu</strong>, <strong>hộp quà
+                                                thời gian</strong> tương ứng.</p>
+                                        <p>Số lượng nhiệm vụ có hạn và chỉ mở trong các khoảng thời gian nhất định nên hãy nhanh tay thực hiện nhé.</p>
+                                        <div style="text-align:right;">
+                                            <a href="../mission/index.html">Thực hiện &rarr;</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Giới thiệu-->
+                        <div class="col-xl-3">
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary"><a href="../reference/index.html">Giới
+                                            thiệu</a></h6>
+                                </div>
+                                <div class="card-body">
+                                    <div>
+                                        <p>Giới thiệu ứng dụng cho bạn bè để nhận xu và phần trăm (%) tiền hoa hồng từ người tham gia.</p>
+                                        <div style="text-align:right;">
+                                            <a href="../reference/index.html">Thực hiện &rarr;</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quảng cáo-->
+                        <div class="col-xl-12">
+                            <div class="card shadow mb-4">
+
+                                <div class="card-body">
+                                    <div>
+                                        <!-- <p>...</p> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; Move Online</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Announcement modal-->
+    <div class="modal fade" id="announcement-gift-box" tabindex="-1" aria-hidden="true" role="dialog">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Thông báo</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-3 needs-validation" novalidate>
+                        <div class="col-md-12 position-center" style="text-align: center;">
+                            <p id="announcement-content">Nội dung</p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="form-control" id="ok-btn">OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="../../common/vendor/jquery/jquery.min.js"></script>
+    <script src="../../common/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="../../common/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
+    <!--=========================DTO================================-->
+    <script src="../../dto/BaseDTO.js"></script>
+    <script src="../../dto/UserDTO.js"></script>
+    <script src="../../dto/AnnouncementDTO.js"></script>
+    <script src="../../dto/WithdrawRequestDTO.js"></script>
+
+    <!--=========================Request================================-->
+    <script src="../../common/js/connecter.js"></script>
+    <script src="../../request/UserRequest.js"></script>
+    <script src="../../request/GiftBoxRequest.js"></script>
+    <script src="../../request/AnnouncementRequest.js"></script>
+    <script src="../../request/WithdrawRequestRequest.js"></script>
+    <script src="js/dashboard_main.js"></script>
+
+</body>
+
+</html>

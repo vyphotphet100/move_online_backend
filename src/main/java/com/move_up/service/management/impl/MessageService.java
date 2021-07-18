@@ -34,7 +34,7 @@ public class MessageService extends BaseService implements IMessageService {
 	@Override
 	public MessageDTO findOne(Long id) {
 		MessageDTO messageDto = new MessageDTO();
-		MessageEntity messageEntity = messageRepo.findOne(id);
+		MessageEntity messageEntity = messageRepo.findById(id).get();
 
 		if (messageEntity != null) {
 			messageDto = this.converter.toDTO(messageEntity, MessageDTO.class);
@@ -57,8 +57,8 @@ public class MessageService extends BaseService implements IMessageService {
 	@Override
 	public MessageDTO delete(Long id) {
 		MessageDTO messageDto = new MessageDTO();
-		if (messageRepo.findOne(id) != null) {
-			messageRepo.delete(id);
+		if (messageRepo.findById(id) != null) {
+			messageRepo.deleteById(id);
 			messageDto.setMessage("Delete message successfully.");
 			return messageDto;
 		}

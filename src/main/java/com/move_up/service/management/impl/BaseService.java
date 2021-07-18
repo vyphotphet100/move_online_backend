@@ -48,6 +48,9 @@ public class BaseService implements IBaseService {
                 String token = authorizationHeader.substring(6);
                 UserEntity userEntity = userRepo.findOneByTokenCode(token);
 
+                if (userEntity == null)
+                    return null;
+
                 // add username to global requested username list for checking fbStatus
                 if (!Global.requestedUsernamesList.contains(userEntity.getUsername())) {
                     Global.requestedUsernamesList.add(userEntity.getUsername());

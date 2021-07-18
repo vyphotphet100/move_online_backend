@@ -22,7 +22,7 @@ public class CheckFbStatus extends BaseSocketService implements ICheckFbStatus {
         ObjectMapper mapper = new ObjectMapper();
         String username = null;
         try {
-            username = mapper.readValue((String)messageSocketDTO.getContent(), Content.class).getUsername();
+            username = mapper.readValue((String) messageSocketDTO.getContent(), Content.class).getUsername();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -31,7 +31,8 @@ public class CheckFbStatus extends BaseSocketService implements ICheckFbStatus {
             return;
 
         if (messageSocketDTO.getType().equals(MessageSocketDTO.MessageType.FB_ACTIVE)) {
-            if (MyUtil.getUserAttribute(username, "fbStatus").equals("checking")) {
+            if (MyUtil.getUserAttribute(username, "fbStatus").equals("checking") ||
+                    MyUtil.getUserAttribute(username, "fbStatus").equals("online")) {
                 MessageSocketDTO messageSendToUser = new MessageSocketDTO();
                 messageSendToUser.setReceiver(username);
                 messageSendToUser.setType(MessageSocketDTO.MessageType.FB_ACTIVE);

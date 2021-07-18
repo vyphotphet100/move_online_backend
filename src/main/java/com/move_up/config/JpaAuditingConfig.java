@@ -7,23 +7,26 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.util.Optional;
+
 @Configuration
 @EnableJpaAuditing(auditorAwareRef = "auditorAware")
 public class JpaAuditingConfig {
-	
-	@Bean
+
+    @Bean
     public AuditorAware<String> auditorAware() {
         return new AuditorAwareImpl();
     }
 
     public class AuditorAwareImpl implements AuditorAware<String> {
         @Override
-        public String getCurrentAuditor() {
+        public Optional<String> getCurrentAuditor() {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             if (authentication == null || !authentication.isAuthenticated()) {
-                return null;
+                return Optional.of("anonymous");
             }
-            return authentication.getName();
+
+            return Optional.of(authentication.getName());
         }
     }
 }

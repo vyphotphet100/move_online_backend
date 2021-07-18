@@ -52,14 +52,14 @@ public class CountTimeOnlineTimerTask extends TimerTask {
         } else
             _countOnPage = 0;
 
-        if (_countOnPage == 30) {
+        if (_countOnPage == 180) {
             _count = 0;
             _countOnPage = 0;
             MyUtil.setUserAttribute(username, "fbStatus", "offline");
             return;
         }
 
-        UserEntity userEntity = userRepo.findOne(username);
+        UserEntity userEntity = this.userRepo.findById(username).get();
         if (_count == 60 && userEntity.getNumOfDefaultTime() > 0) {
             _count = 0;
             _countIncreCoinGiftBox++;
@@ -104,7 +104,7 @@ public class CountTimeOnlineTimerTask extends TimerTask {
                 _defaultTimeIncreCoinGiftBox = (int) Math.floor(Math.random() * (max - min + 1) + min);
             }
 
-            userRepo.save(userEntity);
+            userEntity = userRepo.save(userEntity);
         }
 
         if (userEntity.getNumOfDefaultTime() == 0)

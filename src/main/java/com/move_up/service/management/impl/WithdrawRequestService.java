@@ -75,7 +75,7 @@ public class WithdrawRequestService extends BaseService implements IWithdrawRequ
 	public WithdrawRequestDTO findOne(Long id, HttpServletRequest request, String withdrawRequestString) {
 		UserEntity userEntity = this.getRequestedUser(request);
 		WithdrawRequestDTO withdrawRequestDto = null;
-		WithdrawRequestEntity withdrawRequestEntity = withdrawRequestRepo.findOne(id);
+		WithdrawRequestEntity withdrawRequestEntity = withdrawRequestRepo.findById(id).get();
 
 		if (withdrawRequestString.contains("requestedRole=user")) {
 			if (userEntity == null)
@@ -131,7 +131,7 @@ public class WithdrawRequestService extends BaseService implements IWithdrawRequ
 
 		// check money if this request is ordered by admin
 		if (withdrawRequestString.contains("requestedRole=admin")) {
-			UserEntity userInWithdrawRequest = userRepo.findOne(withdrawRequestDto.getUsername());
+			UserEntity userInWithdrawRequest = userRepo.findById(withdrawRequestDto.getUsername()).get();
 			if (userInWithdrawRequest == null)
 				return (WithdrawRequestDTO) this.ExceptionObject(withdrawRequestDto,
 						"Người dùng không tồn tại trong hệ thống.");
@@ -160,7 +160,7 @@ public class WithdrawRequestService extends BaseService implements IWithdrawRequ
 	public WithdrawRequestDTO update(WithdrawRequestDTO withdrawRequestDto, HttpServletRequest request,
 			String withdrawRequestString) {
 
-//		if (withdrawRequestRepo.findOne(withdrawRequestDto.getId()) != null) {
+//		if (withdrawRequestRepo.findById(withdrawRequestDto.getId()) != null) {
 //			WithdrawRequestEntity withdrawRequestEntity = withdrawRequestRepo
 //					.save(this.converter.toEntity(withdrawRequestDto, WithdrawRequestEntity.class));
 //			withdrawRequestDto = this.converter.toDTO(withdrawRequestEntity, WithdrawRequestDTO.class);
@@ -182,7 +182,7 @@ public class WithdrawRequestService extends BaseService implements IWithdrawRequ
 //			return (WithdrawRequestDTO) this.ExceptionObject(new WithdrawRequestDTO(), "Service does not know user.");
 //
 //		WithdrawRequestDTO withdrawRequestDto = new WithdrawRequestDTO();
-//		if (withdrawRequestRepo.findOne(id) != null) {
+//		if (withdrawRequestRepo.findById(id) != null) {
 //			withdrawRequestRepo.delete(id);
 //			withdrawRequestDto.setMessage("Xóa lệnh rút tiền thành công.");
 //			return withdrawRequestDto;

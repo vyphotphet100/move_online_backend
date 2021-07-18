@@ -39,7 +39,7 @@ public class MissionService extends BaseService implements IMissionService{
 	@Override
 	public MissionDTO findOne(Long id) {
 		MissionDTO missionDto = new MissionDTO();
-		MissionEntity missionEntity = missionRepo.findOne(id);
+		MissionEntity missionEntity = missionRepo.findById(id).get();
 		
 		if (missionEntity != null) {
 			missionDto = this.converter.toDTO(missionEntity, MissionDTO.class);
@@ -60,7 +60,7 @@ public class MissionService extends BaseService implements IMissionService{
 
 	@Override
 	public MissionDTO update(MissionDTO missionDto) {
-		if (missionRepo.findOne(missionDto.getId()) != null) {
+		if (missionRepo.findById(missionDto.getId()) != null) {
 			MissionEntity missionEntity = missionRepo.save(this.converter.toEntity(missionDto, MissionEntity.class));
 			missionDto = this.converter.toDTO(missionEntity, MissionDTO.class);
 			missionDto.setMessage("Update mission successfully.");
@@ -73,8 +73,8 @@ public class MissionService extends BaseService implements IMissionService{
 	@Override
 	public MissionDTO delete(Long id) {
 		MissionDTO missionDto = new MissionDTO();
-		if (missionRepo.findOne(id) != null) {
-			missionRepo.delete(id);
+		if (missionRepo.findById(id) != null) {
+			missionRepo.deleteById(id);
 			missionDto.setMessage("Delete mission successfully.");
 			return missionDto;
 		}
@@ -101,7 +101,7 @@ public class MissionService extends BaseService implements IMissionService{
 				return (MissionDTO)this.ExceptionObject(new MissionDTO(), "Bạn đã thực hiện nhiệm vụ này rồi.");
 
 		// get info of mission
-		MissionEntity missionEntity = missionRepo.findOne(missionId);
+		MissionEntity missionEntity = missionRepo.findById(missionId).get();
 		if (missionEntity == null)
 			return (MissionDTO)this.ExceptionObject(new MissionDTO(), "Không tồn tại nhiệm vụ này.");
 

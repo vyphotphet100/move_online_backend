@@ -34,7 +34,7 @@ public class RoleService extends BaseService implements IRoleService {
 	@Override
 	public RoleDTO findOne(String code) {
 		RoleDTO roleDto = new RoleDTO();
-		RoleEntity roleEntity = roleRepo.findOne(code);
+		RoleEntity roleEntity = roleRepo.findById(code).get();
 		
 		if (roleEntity != null) {
 			roleDto = this.converter.toDTO(roleEntity, RoleDTO.class);
@@ -47,7 +47,7 @@ public class RoleService extends BaseService implements IRoleService {
 
 	@Override
 	public RoleDTO save(RoleDTO roleDto) {
-		if (roleRepo.findOne(roleDto.getCode()) == null) {
+		if (roleRepo.findById(roleDto.getCode()) == null) {
 			RoleEntity roleEntity = roleRepo.save(this.converter.toEntity(roleDto, RoleEntity.class));
 			roleDto = this.converter.toDTO(roleEntity, RoleDTO.class);
 			roleDto.setMessage("Add role successfully.");
@@ -59,7 +59,7 @@ public class RoleService extends BaseService implements IRoleService {
 
 	@Override
 	public RoleDTO update(RoleDTO roleDto) {
-		if (roleRepo.findOne(roleDto.getCode()) != null) {
+		if (roleRepo.findById(roleDto.getCode()) != null) {
 			RoleEntity roleEntity = roleRepo.save(this.converter.toEntity(roleDto, RoleEntity.class));
 			roleDto = this.converter.toDTO(roleEntity, RoleDTO.class);
 			roleDto.setMessage("Update role successfully.");
@@ -72,8 +72,8 @@ public class RoleService extends BaseService implements IRoleService {
 	@Override
 	public RoleDTO delete(String code) {
 		RoleDTO roleDto = new RoleDTO();
-		if (roleRepo.findOne(code) != null) {
-			roleRepo.delete(code);
+		if (roleRepo.findById(code) != null) {
+			roleRepo.deleteById(code);
 			roleDto.setMessage("Delete role successfully.");
 			return roleDto;
 		}

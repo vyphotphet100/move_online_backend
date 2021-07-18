@@ -228,9 +228,9 @@ public class Converter {
 			MessageDTO messageDto = (MessageDTO) dto;
 
 			if (messageDto.getSentUsername() != null)
-				messageEntity.setSentUser(userRepo.findOne(messageDto.getSentUsername()));
+				messageEntity.setSentUser(userRepo.findById(messageDto.getSentUsername()).get());
 			if (messageDto.getReceivedUsername() != null)
-				messageEntity.setReceivedUser(userRepo.findOne(messageDto.getReceivedUsername()));
+				messageEntity.setReceivedUser(userRepo.findById(messageDto.getReceivedUsername()).get());
 
 			return (T) messageEntity;
 		} else if (resObj instanceof MissionEntity) {
@@ -239,7 +239,7 @@ public class Converter {
 
 			if (missionDto.getUsernames() != null) {
 				for (String username : missionDto.getUsernames())
-					missionEntity.getUsers().add(userRepo.findOne(username));
+					missionEntity.getUsers().add(userRepo.findById(username).get());
 			}
 
 			return (T) missionEntity;
@@ -248,7 +248,7 @@ public class Converter {
 			MomoDTO momoDto = (MomoDTO) dto;
 
 			if (momoDto.getUsername() != null)
-				momoEntity.setUser(userRepo.findOne(momoDto.getUsername()));
+				momoEntity.setUser(userRepo.findById(momoDto.getUsername()).get());
 
 			return (T) momoEntity;
 		} else if (resObj instanceof RoleEntity) {
@@ -257,7 +257,7 @@ public class Converter {
 
 			if (roleDto.getUsernames() != null) {
 				for (String username : roleDto.getUsernames())
-					roleEntity.getUsers().add(userRepo.findOne(username));
+					roleEntity.getUsers().add(userRepo.findById(username).get());
 			}
 
 			return (T) roleEntity;
@@ -267,38 +267,38 @@ public class Converter {
 
 			if (userDto.getReferredUsernames() != null) {
 				for (String username : userDto.getReferredUsernames())
-					userEntity.getReferredUsers().add(userRepo.findOne(username));
+					userEntity.getReferredUsers().add(userRepo.findById(username).get());
 			}
 
 			if (userDto.getReferrerUsername() != null)
-				userEntity.setReferrerUser(userRepo.findOne(userDto.getReferrerUsername()));
+				userEntity.setReferrerUser(userRepo.findById(userDto.getReferrerUsername()).get());
 
 			if (userDto.getRoleCodes() != null) {
 				for (String roleCode : userDto.getRoleCodes())
-					userEntity.getRoles().add(roleRepo.findOne(roleCode));
+					userEntity.getRoles().add(roleRepo.findById(roleCode).get());
 			}
 
 			if (userDto.getMomoPhoneNumber() != null)
-				userEntity.setMomo(momoRepo.findOne(userDto.getMomoPhoneNumber()));
+				userEntity.setMomo(momoRepo.findById(userDto.getMomoPhoneNumber()).get());
 
 			if (userDto.getMissionIds() != null) {
 				for (Long id : userDto.getMissionIds())
-					userEntity.getMissions().add(missionRepo.findOne(id));
+					userEntity.getMissions().add(missionRepo.findById(id).get());
 			}
 
 			if (userDto.getSentMessageIds() != null) {
 				for (Long id : userDto.getSentMessageIds())
-					userEntity.getSentMessages().add(messageRepo.findOne(id));
+					userEntity.getSentMessages().add(messageRepo.findById(id).get());
 			}
 
 			if (userDto.getReceivedMessageIds() != null) {
 				for (Long id : userDto.getReceivedMessageIds())
-					userEntity.getReceivedMessages().add(messageRepo.findOne(id));
+					userEntity.getReceivedMessages().add(messageRepo.findById(id).get());
 			}
 
 			if (userDto.getWithdrawRequestIds() != null) {
 				for (Long id : userDto.getWithdrawRequestIds())
-					userEntity.getWithdrawRequests().add(withdrawRequestRepo.findOne(id));
+					userEntity.getWithdrawRequests().add(withdrawRequestRepo.findById(id).get());
 			}
 
 			return (T) userEntity;
@@ -307,7 +307,7 @@ public class Converter {
 			WithdrawRequestDTO withdrawRequestDto = (WithdrawRequestDTO) dto;
 
 			if (withdrawRequestDto.getUsername() != null) {
-				withdrawRequestEntity.setUser(userRepo.findOne(withdrawRequestDto.getUsername()));
+				withdrawRequestEntity.setUser(userRepo.findById(withdrawRequestDto.getUsername()).get());
 			}
 
 			return (T) withdrawRequestEntity;

@@ -53,7 +53,7 @@ public class GiftBoxService extends BaseService implements IGiftBoxService {
 				coinGiftBoxDto.setMessage("Bạn đã nhận được " + value + " xu từ Hộp quà xu.");
 				return coinGiftBoxDto;
 			}
-			return (CoinGiftBoxDTO) this.ExceptionObject(new CoinGiftBoxDTO(), "Bạn không còn Hộp quà xu nào nữa.");
+			return (CoinGiftBoxDTO) this.ExceptionObject(new CoinGiftBoxDTO(), "Bạn không còn Hộp quà xu nào nữa. Làm nhiệm vụ để nhận thêm Hộp quà xu.");
 		}
 
 		return (CoinGiftBoxDTO) this.ExceptionObject(new CoinGiftBoxDTO(), "Service does not know user.");
@@ -93,7 +93,7 @@ public class GiftBoxService extends BaseService implements IGiftBoxService {
 				timeGiftBoxDto.setMessage("Bạn đã nhận được " + value + " phút từ Hộp quà thời gian.");
 				return timeGiftBoxDto;
 			}
-			return (TimeGiftBoxDTO) this.ExceptionObject(new TimeGiftBoxDTO(), "Bạn không còn Hộp quà thời gian nào nữa.");
+			return (TimeGiftBoxDTO) this.ExceptionObject(new TimeGiftBoxDTO(), "Bạn không còn Hộp quà thời gian nào nữa. Làm nhiệm vụ để nhận thêm Hộp quà thời gian.");
 		}
 
 		return (TimeGiftBoxDTO) this.ExceptionObject(new TimeGiftBoxDTO(), "Service does not know user.");

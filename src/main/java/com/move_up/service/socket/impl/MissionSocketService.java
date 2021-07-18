@@ -67,7 +67,7 @@ public class MissionSocketService extends BaseSocketService implements IMissionS
         }
 
         ViewAdsMission viewAdsMission = objectMapper.readValue((String) messageSocketDto.getContent(), ViewAdsMission.class);
-        MissionEntity missionEntity = missionRepo.findOne(viewAdsMission.getId());
+        MissionEntity missionEntity = missionRepo.findById(viewAdsMission.getId()).get();
 
         String channel = "/channel/" + userEntity.getUsername() + "/view_ads";
         Integer missionTime = missionEntity.getTime();

@@ -1,8 +1,10 @@
 package com.move_up.service.management.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import com.move_up.dto.AnnouncementDTO;
@@ -34,7 +36,7 @@ public class AnnouncementService extends BaseService implements IAnnouncementSer
 	@Override
 	public AnnouncementDTO findOne(Long id) {
 		AnnouncementDTO announcementDto = new AnnouncementDTO();
-		AnnouncementEntity announcementEntity = announcementRepo.findOne(id);
+		AnnouncementEntity announcementEntity = announcementRepo.findById(id).get();
 		
 		if (announcementEntity != null) {
 			announcementDto = this.converter.toDTO(announcementEntity, AnnouncementDTO.class);
@@ -59,7 +61,7 @@ public class AnnouncementService extends BaseService implements IAnnouncementSer
 
 	@Override
 	public AnnouncementDTO update(AnnouncementDTO announcementDto) {
-		if (announcementRepo.findOne(announcementDto.getId()) != null) {
+		if (announcementRepo.findById(announcementDto.getId()) != null) {
 			AnnouncementEntity announcementEntity = announcementRepo.save(this.converter.toEntity(announcementDto, AnnouncementEntity.class));
 			announcementDto = this.converter.toDTO(announcementEntity, AnnouncementDTO.class);
 			announcementDto.setMessage("Update announcement successfully.");
@@ -72,8 +74,8 @@ public class AnnouncementService extends BaseService implements IAnnouncementSer
 	@Override
 	public AnnouncementDTO delete(Long id) {
 		AnnouncementDTO announcementDto = new AnnouncementDTO();
-		if (announcementRepo.findOne(id) != null) {
-			announcementRepo.delete(id);
+		if (announcementRepo.findById(id) != null) {
+			announcementRepo.deleteById(id);
 			announcementDto.setMessage("Delete announcement successfully.");
 			return announcementDto;
 		}

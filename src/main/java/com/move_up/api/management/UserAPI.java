@@ -3,7 +3,10 @@ package com.move_up.api.management;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -14,6 +17,13 @@ import org.springframework.web.bind.annotation.*;
 import com.move_up.dto.UserDTO;
 import com.move_up.service.management.IUserService;
 import org.springframework.web.servlet.view.RedirectView;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @RestController
 public class UserAPI {
@@ -122,5 +132,11 @@ public class UserAPI {
 	public ResponseEntity<UserDTO> checkReferrerExist(@RequestBody UserDTO userDto) {
 		userDto = userService.checkReferrerExist(userDto);
 		return new ResponseEntity<UserDTO>(userDto, userDto.getHttpStatus());
+	}
+
+	@GetMapping(value = "/api/user/picture/{username}", produces = MediaType.IMAGE_JPEG_VALUE)
+	public @ResponseBody byte[] getImage(@PathVariable String username) throws IOException {
+		File file = new File("src/main/resources/static/picture/" + username + ".jpg");
+		return FileUtils.readFileToByteArray(file);
 	}
 }

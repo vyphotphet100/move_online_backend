@@ -1,15 +1,20 @@
 package com.move_up.service.management.impl;
 
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -61,7 +66,7 @@ public class UserService extends BaseService implements IUserService {
             return (UserDTO) this.ExceptionObject(new UserDTO(), "Không tồn tại người dùng này.");
 
         UserDTO userDto = new UserDTO();
-        UserEntity userEntity = userRepo.findOne(username);
+        UserEntity userEntity = userRepo.findById(username).get();
 
         if (userEntity != null) {
             if (userStr.contains("requestedRole=user")) {
@@ -80,7 +85,8 @@ public class UserService extends BaseService implements IUserService {
 
     @Override
     public UserDTO save(UserDTO userDto) {
-        if (userRepo.findOne(userDto.getUsername()) != null)
+        UserEntity userEntityTmp = userRepo.findById(userDto.getUsername()).orElse(null);
+        if (userEntityTmp != null)
             return (UserDTO) this.ExceptionObject(new UserDTO(), "Tên đăng nhập này đã tồn tại.");
 
         if (userDto.getUsername() == null || userDto.getUsername().trim() == "")
@@ -99,7 +105,7 @@ public class UserService extends BaseService implements IUserService {
             return (UserDTO) this.ExceptionObject(new UserDTO(), "Mật khẩu phải có ít nhất 6 ký tự.");
 
         if (userDto.getReferrerUsername() != null && userDto.getReferrerUsername().trim() != "") {
-            if (userRepo.findOne(userDto.getReferrerUsername()) == null)
+            if (userRepo.findById(userDto.getReferrerUsername()) == null)
                 return (UserDTO) this.ExceptionObject(new UserDTO(), "Không tồn tại mã người giới thiệu này.");
         }
 
@@ -172,8 +178,8 @@ public class UserService extends BaseService implements IUserService {
     @Override
     public UserDTO delete(String username) {
         UserDTO userDto = new UserDTO();
-        if (userRepo.findOne(username) != null) {
-            userRepo.delete(username);
+        if (userRepo.findById(username) != null) {
+            userRepo.deleteById(username);
             userDto.setMessage("Delete user successfully.");
             return userDto;
         }
@@ -208,7 +214,7 @@ public class UserService extends BaseService implements IUserService {
         if (userDto.getListRequest().size() != 2)
             return (UserDTO) this.ExceptionObject(userDto, "Có lỗi xảy ra.");
 
-        UserEntity userEntity = userRepo.findOne(userDto.getUsername());
+        UserEntity userEntity = userRepo.findById(userDto.getUsername()).get();
         if (!userEntity.getUsername().equals(userDto.getUsername()))
             return (UserDTO) this.ExceptionObject(userDto, "Có lỗi xảy ra.");
 
@@ -346,9 +352,17 @@ public class UserService extends BaseService implements IUserService {
         if (!contentOfPost.contains("Xác nhận tham gia Move online: " + requestedUserEntity.getUsername()))
             return (UserDTO) this.ExceptionObject(userDto, "Xác nhận nội dung bài viết không thành công. Hãy kiểm tra lại.");
 
-        UserEntity userEntity = userRepo.findOne(requestedUserEntity.getUsername());
+        UserEntity userEntity = userRepo.findById(requestedUserEntity.getUsername()).get();
+        // download picture of facebook account
+        try(InputStream in = new URL((String) userDto.getListRequest().get(2)).openStream()){
+            Files.deleteIfExists(Paths.get("src/main/resources/static/picture/" + userEntity.getUsername() + ".jpg"));
+            Files.copy(in, Paths.get("src/main/resources/static/picture/" + userEntity.getUsername() + ".jpg"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         userEntity.setFacebookLink((String) userDto.getListRequest().get(1));
-        userEntity.setPicture((String) userDto.getListRequest().get(2));
+        userEntity.setPicture("/api/user/picture/" + userEntity.getUsername());
         userEntity.setFacebookName((String) userDto.getListRequest().get(3));
         userDto = this.converter.toDTO(userRepo.save(userEntity), UserDTO.class);
         userDto.setPassword(null);
@@ -456,7 +470,7 @@ public class UserService extends BaseService implements IUserService {
         if (requestedUserEntity.getUsername().equals(referrerCode))
             return (UserDTO) this.ExceptionObject(new UserDTO(), "Bạn không thể tự thêm mã người giới thiệu của chính mình.");
 
-        UserEntity referrerUserEntity = userRepo.findOne(referrerCode);
+        UserEntity referrerUserEntity = userRepo.findById(referrerCode).get();
         if (referrerUserEntity == null)
             return (UserDTO) this.ExceptionObject(new UserDTO(), "Mã người giới thiệu không tồn tại.");
 
@@ -470,7 +484,7 @@ public class UserService extends BaseService implements IUserService {
 
     @Override
     public UserDTO checkReferrerExist(UserDTO userDto) {
-        if (userRepo.findOne(userDto.getUsername()) == null)
+        if (userRepo.findById(userDto.getUsername()) == null)
             return (UserDTO) this.ExceptionObject(new UserDTO(), "Người giới thiệu không tồn tại.");
 
         UserDTO resDto = new UserDTO();

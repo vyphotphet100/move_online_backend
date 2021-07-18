@@ -44,7 +44,7 @@ public class MomoService extends BaseService implements IMomoService {
 			return (MomoDTO) this.ExceptionObject(new MomoDTO(), "Access denied.");
 
 		MomoDTO momoDto = new MomoDTO();
-		MomoEntity momoEntity = momoRepo.findOne(phoneNumber);
+		MomoEntity momoEntity = momoRepo.findById(phoneNumber).get();
 
 		if (momoEntity != null) {
 			momoDto = this.converter.toDTO(momoEntity, MomoDTO.class);
@@ -57,7 +57,7 @@ public class MomoService extends BaseService implements IMomoService {
 
 	@Override
 	public MomoDTO save(MomoDTO momoDto, HttpServletRequest request) {
-		MomoEntity momoEntity = momoRepo.findOne(momoDto.getPhoneNumber());
+		MomoEntity momoEntity = momoRepo.findById(momoDto.getPhoneNumber()).get();
 
 		UserEntity requestedUserEntity = this.getRequestedUser(request);
 		if (requestedUserEntity == null)
@@ -87,7 +87,7 @@ public class MomoService extends BaseService implements IMomoService {
 
 	@Override
 	public MomoDTO update(MomoDTO momoDto) {
-		if (momoRepo.findOne(momoDto.getPhoneNumber()) != null) {
+		if (momoRepo.findById(momoDto.getPhoneNumber()) != null) {
 			MomoEntity momoEntity = momoRepo.save(this.converter.toEntity(momoDto, MomoEntity.class));
 			momoDto = this.converter.toDTO(momoEntity, MomoDTO.class);
 			momoDto.setMessage("Update momo successfully.");
@@ -100,8 +100,8 @@ public class MomoService extends BaseService implements IMomoService {
 	@Override
 	public MomoDTO delete(String phoneNumber) {
 		MomoDTO momoDto = new MomoDTO();
-		if (momoRepo.findOne(phoneNumber) != null) {
-			momoRepo.delete(phoneNumber);
+		if (momoRepo.findById(phoneNumber) != null) {
+			momoRepo.deleteById(phoneNumber);
 			momoDto.setMessage("Delete momo successfully.");
 			return momoDto;
 		}
